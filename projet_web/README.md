@@ -27,3 +27,15 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### Build Docker
+
+```sh
+docker build -t webapp .
+```
+
+### Run docker
+
+```sh
+docker run -p 8080:80 --name webapp -d webapp
+```
