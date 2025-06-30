@@ -2,6 +2,11 @@
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
 import SigninButton from './components/SigninButton.vue'
+import UserProfile from './components/UserProfile.vue'
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore();
+const user = computed(() => store.getters.user);
 import BaseLayout from './components/BaseLayout.vue'
 import HomePage from './pages/HomePage.vue'
 </script>
@@ -12,7 +17,8 @@ import HomePage from './pages/HomePage.vue'
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
-      <SigninButton :user="user" @userChanged="handleUserChanged"/>
+      <SigninButton/>
+      <UserProfile />
     </div>
   </header>
 
