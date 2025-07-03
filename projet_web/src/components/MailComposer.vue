@@ -3,18 +3,18 @@
     <input v-model="to" type="email" placeholder="To" required />
     <input v-model="subject" type="text" placeholder="Subject" required />
     <textarea v-model="body" placeholder="Message" required></textarea>
-    <button type="submit">Send</button>
+    <BaseButton type="submit">Send</BaseButton>
   </form>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import BaseButton from './BaseButton.vue'
 const to = ref('')
 const subject = ref('')
 const body = ref('')
 
 function sendMail() {
-  // Placeholder for sending mail
   alert(`Mail sent to: ${to.value}\nSubject: ${subject.value}`)
   to.value = ''
   subject.value = ''
