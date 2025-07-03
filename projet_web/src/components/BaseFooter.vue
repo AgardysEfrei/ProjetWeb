@@ -22,10 +22,8 @@ export default {
   text-align: center;
   font-size: 0.9em;
   box-sizing: border-box;
-}
-
-.footer a {
-  color: #4fc08d;
-  text-decoration: none;
+  position: relative;
+  left: 0;
 }
 </style>
+
