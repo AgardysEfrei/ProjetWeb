@@ -1,3 +1,4 @@
+using backend.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -6,10 +7,25 @@ namespace backend.Controllers
     [Route("webapp/api/")]
     public class Controller : ControllerBase
     {
-        [HttpPost("users")]
-        public void CreateUser(CreateUserArgs request)
+        private readonly IDatabaseApplication _databaseApplication;
+        public Controller(IDatabaseApplication databaseApplication)
         {
-            throw new NotImplementedException();
+            _databaseApplication = databaseApplication;
+        }
+
+        [HttpPost("users")]
+        public bool CreateUser(CreateUserArgs request)
+        {
+            try
+            {
+                _databaseApplication.AddUser(request);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            
         }
 
         [HttpGet("users/{userId:int}")]
@@ -31,9 +47,17 @@ namespace backend.Controllers
         }
 
         [HttpPost("users/{userId:int}/mails")]
-        public void SaveMail(CreateMailArgs request)
+        public bool SaveMail(CreateMailArgs request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _databaseApplication.AddMail(request);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         [HttpGet("users/{userId:int}/mails")]
