@@ -4,7 +4,9 @@
     <input v-model="to" type="email" placeholder="A" required />
     <input v-model="subject" type="text" placeholder="Objet" required />
     <textarea v-model="body" placeholder="Message" required></textarea>
-    <BaseButton type="submit">Envoyer</BaseButton>
+    <div class="center">
+        <BaseButton type="submit">Envoyer</BaseButton>
+    </div>
   </form>
 </template>
 
@@ -52,8 +54,13 @@ button {
   border-radius: 4px;
   padding: 0.5rem 1rem;
   cursor: pointer;
+  max-width: 100px;
 }
 button:hover {
   background: #1a2acc;
+}
+.center {
+  display: flex;
+  justify-content: center;
 }
 </style>

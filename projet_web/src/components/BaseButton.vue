@@ -35,6 +35,7 @@ const buttonStyle = computed(() => ({
   border: 'none',
   borderRadius: '5px',
   padding: '0.6em 1.2em',
+  margin: '1em',
   fontWeight: 'bold',
   cursor: props.disabled ? 'not-allowed' : 'pointer',
   transition: 'all 0.3s ease'
