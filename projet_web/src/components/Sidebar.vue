@@ -16,25 +16,35 @@ const items = ['Inbox', 'Sent', 'Drafts', 'Trash']
 </script>
 
 <style scoped>
+.main-layout {
+  display: flex;
+  height: 100%;
+  background: #f4f6fa;
+}
+
 .sidebar {
-  width: 180px;
-  background: #222b;
-  color: #fff;
-  padding: 1rem 0;
-  border-radius: 8px;
-  min-height: 400px;
+  flex-shrink: 0;
 }
+
+.content {
+  flex: 1;
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  height: 100%;
+}
+
+.mail-section {
+  min-width: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
 ul {
-  list-style: none;
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-top: 1rem;
   padding: 0;
-}
-li {
-  padding: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-li.active, li:hover {
-  background: #2a3cff;
-  color: #fff;
+  list-style: none;
 }
 </style>
