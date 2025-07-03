@@ -1,15 +1,16 @@
 <template>
+  <BaseButton type="button" @click="$emit('back')" style="margin-bottom:1rem">Retour</BaseButton>
   <form class="mail-composer" @submit.prevent="sendMail">
-    <input v-model="to" type="email" placeholder="To" required />
-    <input v-model="subject" type="text" placeholder="Subject" required />
+    <input v-model="to" type="email" placeholder="A" required />
+    <input v-model="subject" type="text" placeholder="Objet" required />
     <textarea v-model="body" placeholder="Message" required></textarea>
-    <BaseButton type="submit">Send</BaseButton>
+    <BaseButton type="submit">Envoyer</BaseButton>
   </form>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import BaseButton from './BaseButton.vue'
+import BaseButton from '../components/BaseButton.vue'
 const to = ref('')
 const subject = ref('')
 const body = ref('')

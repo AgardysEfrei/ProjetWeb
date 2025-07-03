@@ -1,7 +1,7 @@
 <!-- UserProfile.vue -->
 <template>
   <div v-if="user">
-    <p>Welcome, {{ user.username }}</p>
+    <p>Bienvenue, {{ user.username }}</p>
   </div>
 </template>
 

@@ -38,15 +38,6 @@ function handleCategoryChange(category) {
   state.selectedCategory = category
   state.selectedMail = null
 }
-
-const showComposer = ref(false)
-
-function openComposer() {
-  showComposer.value = true
-}
-function closeComposer() {
-  showComposer.value = false
-}
 </script>
 
 <template>
@@ -54,11 +45,10 @@ function closeComposer() {
     <Sidebar :selected="state.selectedCategory" @update:selected="handleCategoryChange" />
     <div class="content">
       <div class="mail-section">
-        <BaseButton @click="openComposer">Créer un message</BaseButton>
+        <BaseButton @click="$emit('create-message')">Créer un message</BaseButton>
         <ul>
           <MailItem v-for="mail in mails[state.selectedCategory]" :key="mail.id" :mail="mail" @select="handleSelectMail" />
         </ul>
-        <MailComposer v-if="showComposer" />
       </div>
       <MailViewer :mail="state.selectedMail" />
     </div>

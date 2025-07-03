@@ -4,7 +4,8 @@
       <base-button color="primary">
         <i class="fas fa-home"></i> Home
       </base-button>
-    
+    </div>
+    <div class="right">
       <SigninButton/>
       <UserProfile />
     </div>
