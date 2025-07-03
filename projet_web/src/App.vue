@@ -7,6 +7,8 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore();
 const user = computed(() => store.getters.user);
+import BaseLayout from './components/BaseLayout.vue'
+import HomePage from './pages/HomePage.vue'
 </script>
 
 <template>
@@ -22,33 +24,7 @@ const user = computed(() => store.getters.user);
   <main>
     <TheWelcome />
   </main>
+  <base-layout>
+    <home-page />
+  </base-layout>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
