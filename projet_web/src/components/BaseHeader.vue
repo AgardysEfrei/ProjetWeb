@@ -4,12 +4,21 @@
       <base-button color="primary">
         <i class="fas fa-home"></i> Home
       </base-button>
+    
+      <SigninButton/>
+      <UserProfile />
     </div>
   </header>
 </template>
 
 <script setup>
 import BaseButton from './BaseButton.vue'
+import SigninButton from './SigninButton.vue'
+import UserProfile from './UserProfile.vue'
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore();
+const user = computed(() => store.getters.user);
 </script>
 
 <style scoped>

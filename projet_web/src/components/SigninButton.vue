@@ -1,6 +1,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import * as msal from '@azure/msal-browser';
+import BaseButton from './BaseButton.vue';
 
 const store = useStore();
 
@@ -22,5 +23,5 @@ const signIn = async () => {
 </script>
 
 <template>
-  <button @click="signIn">Sign In with Microsoft</button>
+  <BaseButton @click="signIn">Sign In with Microsoft</BaseButton>
 </template>
