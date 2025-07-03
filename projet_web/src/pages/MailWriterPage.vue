@@ -14,9 +14,15 @@ import BaseButton from '../components/BaseButton.vue'
 const to = ref('')
 const subject = ref('')
 const body = ref('')
+const emit = defineEmits(['back', 'send-mail'])
 
 function sendMail() {
-  alert(`Mail sent to: ${to.value}\nSubject: ${subject.value}`)
+  emit('send-mail', {
+    id: Date.now(),
+    sender: to.value,
+    subject: subject.value,
+    body: body.value
+  })
   to.value = ''
   subject.value = ''
   body.value = ''
