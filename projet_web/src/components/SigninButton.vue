@@ -18,10 +18,10 @@ const signIn = async () => {
   await msalInstance.initialize();
   const authResult = await msalInstance.loginPopup({ scopes: ["User.Read"] });
   msalInstance.setActiveAccount(authResult.account);
-  store.commit('setUser', authResult.account); // 👈 this sets user in Vuex
+  store.commit('setUser', authResult.account);
 };
 </script>
 
 <template>
-  <BaseButton @click="signIn">Sign In with Microsoft</BaseButton>
+  <BaseButton @click="signIn">Connexion Microsoft</BaseButton>
 </template>

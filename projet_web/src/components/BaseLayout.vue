@@ -4,27 +4,29 @@ import BaseFooter from './BaseFooter.vue'
 </script>
 
 <template>
-  <div id="layout">
+  <div class="layout">
     <base-header />
-    <div class="content">
+    <main class="layout-content">
       <slot />
-    </div>
+    </main>
     <base-footer />
   </div>
 </template>
 
+
 <style scoped>
-#layout {
+.layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
 }
 
-.content {
+.layout-content {
   flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  flex-direction: column;
+  overflow: auto;
 }
 </style>
+

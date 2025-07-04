@@ -8,6 +8,10 @@
       <SigninButton/>
       <UserProfile />
     </div>
+    <div class="right">
+      <SigninButton/>
+      <UserProfile />
+    </div>
   </header>
 </template>
 
@@ -31,15 +35,10 @@ const user = computed(() => store.getters.user);
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
-}
-
-.left, .right {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
-
-i {
-  margin-right: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 1000; 
 }
 </style>
+
+
