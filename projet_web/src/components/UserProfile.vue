@@ -1,7 +1,8 @@
-<!-- UserProfile.vue -->
 <template>
   <div v-if="user">
-    <p>Bienvenue, {{ user.username }}</p>
+    <p class="user-welcome" @click="$emit('show-profile')" style="cursor:pointer;user-select:none;">
+      Bienvenue, {{ user.username }}
+    </p>
   </div>
 </template>
 
@@ -11,4 +12,5 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const user = computed(() => store.getters.user);
+const emit = defineEmits(['show-profile'])
 </script>

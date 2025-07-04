@@ -1,13 +1,13 @@
 <template>
   <header class="header">
     <div class="left">
-      <base-button color="primary">
+      <base-button color="primary" @click="$emit('show-home')">
         <i class="fas fa-home"></i> Home
       </base-button>
     </div>
     <div class="right">
       <SigninButton/>
-      <UserProfile />
+      <UserProfile @show-profile="$emit('show-profile')" />
     </div>
   </header>
 </template>
@@ -20,6 +20,7 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore();
 const user = computed(() => store.getters.user);
+const emit = defineEmits(['show-profile', 'show-home'])
 </script>
 
 <style scoped>

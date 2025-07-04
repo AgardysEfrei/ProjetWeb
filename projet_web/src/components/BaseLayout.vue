@@ -1,11 +1,12 @@
 <script setup>
 import BaseHeader from './BaseHeader.vue'
 import BaseFooter from './BaseFooter.vue'
+const emit = defineEmits(['show-profile', 'show-home'])
 </script>
 
 <template>
   <div class="layout">
-    <base-header />
+    <base-header @show-profile="$emit('show-profile')" @show-home="$emit('show-home')" />
     <main class="layout-content">
       <slot />
     </main>
