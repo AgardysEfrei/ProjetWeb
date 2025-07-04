@@ -14,11 +14,11 @@ namespace backend.Controllers
         }
 
         [HttpPost("users")]
-        public bool CreateUser(CreateUserArgs request)
+        public async Task<bool> CreateUser(CreateUserArgs request)
         {
             try
             {
-                _databaseApplication.AddUser(request);
+                await _databaseApplication.AddUser(request);
                 return true;
             }
             catch
@@ -47,11 +47,11 @@ namespace backend.Controllers
         }
 
         [HttpPost("users/{userId:int}/mails")]
-        public bool SaveMail(CreateMailArgs request)
+        public async Task<bool> SaveMail(MailArgs request)
         {
             try
             {
-                _databaseApplication.AddMail(request);
+                await _databaseApplication.AddMail(request);
                 return true;
             }
             catch
@@ -61,9 +61,17 @@ namespace backend.Controllers
         }
 
         [HttpGet("users/{userId:int}/mails")]
-        public void GetUserMails(int userId)
+        public async Task<List<MailArgs>> GetUserMails(int userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var ret = await _databaseApplication.GetMails(userId);
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpGet("users/{userId:int}/mails/{mailId:int}")]

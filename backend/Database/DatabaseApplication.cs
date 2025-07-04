@@ -29,13 +29,28 @@ namespace backend.Database
             }
         }
 
-        public async Task AddMail(CreateMailArgs request)
+        public async Task AddMail(MailArgs request)
         {
             try
             {
                 using var con = DatabaseApplicationUtils.DatabaseConnection(_connectionString);
 
                 await con.QueryAsync(DatabaseApplicationUtils.AddMail(request));
+            }
+            catch (Exception ex)
+            {
+                throw new NpgsqlException(ex.Message);
+            }
+        }
+
+        public async Task<List<MailArgs>> GetMails(int userId)
+        {
+            try
+            {
+                using var con = DatabaseApplicationUtils.DatabaseConnection(_connectionString);
+
+                var mails = await con.QueryAsync<MailArgs>(DatabaseApplicationUtils.GetMails(userId));
+                return mails.AsList();
             }
             catch (Exception ex)
             {
