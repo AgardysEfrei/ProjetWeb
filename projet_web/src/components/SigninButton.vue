@@ -1,27 +1,25 @@
 <script setup>
 import { useStore } from 'vuex';
-import * as msal from '@azure/msal-browser';
 import BaseButton from './BaseButton.vue';
+import { signIn, fetchEmails, fetchUserProfile } from '../lib/microsoftGraph.js';
 
 const store = useStore();
 
-const msalInstance = new msal.PublicClientApplication({
-  auth: {
-    clientId: import.meta.env.VITE_APP_OAUTH_CLIENT_ID
-  },
-  cache: {
-    cacheLocation: "sessionStorage"
-  }
-});
+const signInHandler = async () => {
+  try {
+    await signIn(); // Just triggers the popup and sets active account
 
-const signIn = async () => {
-  await msalInstance.initialize();
-  const authResult = await msalInstance.loginPopup({ scopes: ["User.Read"] });
-  msalInstance.setActiveAccount(authResult.account);
-  store.commit('setUser', authResult.account);
+    const userProfile = await fetchUserProfile(); // ✅ Fetch rich user profile
+    store.commit('setUser', userProfile); // Now user has displayName, mail, etc.
+
+    const mails = await fetchEmails();
+    store.commit('setEmails', mails);
+  } catch (error) {
+    console.error("Erreur lors du sign-in ou fetch mails :", error);
+  }
 };
 </script>
 
 <template>
-  <BaseButton @click="signIn">Connexion Microsoft</BaseButton>
+  <BaseButton @click="signInHandler">Connexion Microsoft</BaseButton>
 </template>

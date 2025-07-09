@@ -11,4 +11,5 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const user = computed(() => store.getters.user);
+console.log(user);
 </script>
