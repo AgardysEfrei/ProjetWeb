@@ -2,8 +2,9 @@
   <header class="header">
     <div class="left">
       <base-button color="primary">
-        <i class="fas fa-home"></i> Home
-      </base-button>
+  🏠 Home
+</base-button>
+
     </div>
     <div class="right">
       <SigninButton/>
