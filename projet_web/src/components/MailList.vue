@@ -8,17 +8,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import MailItem from './MailItem.vue'
 
-const mails = ref([
-  { id: 1, sender: 'alice@example.com', subject: 'Welcome to your inbox!' },
-  { id: 2, sender: 'bob@example.com', subject: 'Meeting tomorrow' },
-  { id: 3, sender: 'carol@example.com', subject: 'Invoice attached' },
-])
-
 const onSelectMail = (mail) => {
-  // Placeholder for mail selection logic
   alert(`Selected mail from: ${mail.sender}`)
 }
 </script>

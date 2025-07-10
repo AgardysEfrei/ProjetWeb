@@ -2,22 +2,12 @@
 import {ref, reactive, computed} from 'vue'
 import BaseButton from '../components/BaseButton.vue'
 import MailViewer from '../components/MailViewer.vue'
-import MailItem from '../components/MailItem.vue'
 
 import {useStore} from "vuex";
 import {onMounted} from "vue"
 import {signIn} from "@/lib/microsoftGraph.js";
 const store = useStore();
 const mails = computed(() => store.getters.emails);
-
-const clickCount = ref(0)
-
-function handleButtonClick() {
-  clickCount.value++
-  return new Promise((resolve) => {
-    setTimeout(resolve, clickCount.value * 1000)
-  })
-}
 
 const state = reactive({
   selectedCategory: 'Inbox',
@@ -37,15 +27,12 @@ const tab = ref('recu')
 
 onMounted(async () => {
   try {
-    // 1. Vérifier si l'utilisateur est déjà dans le store (connecté)
     if (!store.getters.user) {
-      // 2. Sinon, lancer la connexion
       console.log("🔐 Utilisateur non connecté, connexion en cours...");
       await signIn();
       console.log("✅ Utilisateur connecté");
     }
 
-    // 3. Après connexion, récupérer les emails
     console.log('📩 fetchEmails lancé...');
     await store.dispatch('fetchEmails');
     console.log('✅ emails après chargement :', store.getters.emails);
