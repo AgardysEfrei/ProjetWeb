@@ -13,4 +13,5 @@ import { useStore } from 'vuex';
 const store = useStore();
 const user = computed(() => store.getters.user);
 const emit = defineEmits(['show-profile'])
+console.log(user);
 </script>

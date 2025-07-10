@@ -4,6 +4,9 @@
       <base-button color="primary" @click="$emit('show-home')">
         <i class="fas fa-home"></i> Home
       </base-button>
+    
+      <SigninButton/>
+      <UserProfile />
     </div>
     <div class="right">
       <SigninButton/>

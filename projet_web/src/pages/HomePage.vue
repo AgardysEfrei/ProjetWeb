@@ -1,8 +1,14 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import {ref, reactive, computed} from 'vue'
 import BaseButton from '../components/BaseButton.vue'
 import MailViewer from '../components/MailViewer.vue'
 import MailItem from '../components/MailItem.vue'
+
+import {useStore} from "vuex";
+import {onMounted} from "vue"
+import {signIn} from "@/lib/microsoftGraph.js";
+const store = useStore();
+const mails = computed(() => store.getters.emails);
 
 const clickCount = ref(0)
 
@@ -18,26 +24,8 @@ const state = reactive({
   selectedMail: null
 })
 
-const props = defineProps({
-  sentMails: {
-    type: Array,
-    default: () => []
-  }
-})
-
-const mails = {
-  Inbox: [
-    { id: 1, sender: 'test@example.com', subject: 'TEST 1', body: 'Et est admodum mirum videre plebem innumeram mentibus ardore quodam infuso cum dimicationum curulium eventu pendentem. haec similiaque memorabile nihil vel serium agi Romae permittunt. ergo redeundum ad textum.\nProcedente igitur mox tempore cum adventicium nihil inveniretur, relicta ora maritima in Lycaoniam adnexam Isauriae se contulerunt ibique densis intersaepientes itinera praetenturis provincialium et viatorum opibus pascebantur.\nEt hanc quidem praeter oppida multa duae civitates exornant Seleucia opus Seleuci regis, et Claudiopolis quam deduxit coloniam Claudius Caesar. Isaura enim antehac nimium potens, olim subversa ut rebellatrix interneciva aegre vestigia claritudinis pristinae monstrat admodum pauca.\nEt hanc quidem praeter oppida multa duae civitates exornant Seleucia opus Seleuci regis, et Claudiopolis quam deduxit coloniam Claudius Caesar. Isaura enim antehac nimium potens, olim subversa ut rebellatrix interneciva aegre vestigia claritudinis pristinae monstrat admodum pauca.\nQuam quidem partem accusationis admiratus sum et moleste tuli potissimum esse Atratino datam. Neque enim decebat neque aetas illa postulabat neque, id quod animadvertere poteratis, pudor patiebatur optimi adulescentis in tali illum oratione versari. Vellem aliquis ex vobis robustioribus hunc male dicendi locum suscepisset; aliquanto liberius et fortius et magis more nostro refutaremus istam male dicendi licentiam. Tecum, Atratine, agam lenius, quod et pudor tuus moderatur orationi meae et meum erga te parentemque tuum beneficium tueri debeo' },
-    { id: 2, sender: 'test@example.com', subject: 'TEST 2', body: 'truc much, machin truc, blabla, etc.' },
-    { id: 3, sender: 'test@example.com', subject: 'TEST 3', body: 'truc much, machin truc, blabla, etc.' },
-  ],
-  Sent: props.sentMails,
-  Drafts: [],
-  Trash: []
-}
-
 function handleSelectMail(mail) {
-  state.selectedMail = mail
+  store.dispatch('selectMail', mail)
 }
 
 function handleCategoryChange(category) {
@@ -46,6 +34,27 @@ function handleCategoryChange(category) {
 }
 
 const tab = ref('recu')
+
+onMounted(async () => {
+  try {
+    // 1. Vérifier si l'utilisateur est déjà dans le store (connecté)
+    if (!store.getters.user) {
+      // 2. Sinon, lancer la connexion
+      console.log("🔐 Utilisateur non connecté, connexion en cours...");
+      await signIn();
+      console.log("✅ Utilisateur connecté");
+    }
+
+    // 3. Après connexion, récupérer les emails
+    console.log('📩 fetchEmails lancé...');
+    await store.dispatch('fetchEmails');
+    console.log('✅ emails après chargement :', store.getters.emails);
+    console.log('🔐 accessToken =', store.getters.user?.accessToken);
+
+  } catch (error) {
+    console.error("Erreur lors de la connexion ou du fetch :", error);
+  }
+});
 </script>
 
 <template>
@@ -54,21 +63,34 @@ const tab = ref('recu')
     <div class="content">
       <div class="mail-section">
         <BaseButton @click="$emit('create-message')">Créer un message</BaseButton>
+
         <div class="tabs">
           <button :class="{active: tab === 'recu'}" @click="tab = 'recu'">Reçus</button>
           <button :class="{active: tab === 'envoye'}" @click="tab = 'envoye'">Envoyés</button>
         </div>
+
         <ul v-if="tab === 'recu'">
-          <MailItem v-for="mail in mails['Inbox']" :key="mail.id" :mail="mail" @select="handleSelectMail" />
+          <li v-for="mail in mails.Inbox" :key="mail.id" @click="handleSelectMail(mail)" style="cursor: pointer">
+            De: {{ mail.sender.emailAddress.name}} — Sujet: {{ mail.subject }}
+            <template v-if="mail.ccRecipients && mail.ccRecipients.length">
+              — CC : {{ mail.ccRecipients}}
+            </template>
+            <template v-if="mail.bccRecipients && mail.bccRecipients.length">
+              — CCI : {{ mail.bccRecipients}}
+            </template>
+          </li>
         </ul>
         <ul v-else>
-          <MailItem v-for="mail in mails['Sent']" :key="mail.id" :mail="mail" @select="handleSelectMail" />
+          <li v-for="mail in mails.SentItems" :key="mail.id" @click="handleSelectMail(mail)" style="cursor: pointer">
+            Destinataire : {{mail.toRecipients[0].emailAddress.name}}
+          </li>
         </ul>
       </div>
-      <MailViewer :mail="state.selectedMail" />
+      <MailViewer/>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .main-layout {

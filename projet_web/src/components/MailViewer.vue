@@ -1,19 +1,21 @@
+<script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const mail = computed(() => store.getters.selectedMail)
+</script>
+
 <template>
   <div v-if="mail" class="mail-viewer">
     <h3>{{ mail.subject }}</h3>
-    <p><strong>From:</strong> {{ mail.sender }}</p>
-    <div class="mail-body">{{ mail.body }}</div>
+    <p><strong>From:</strong> {{ mail.sender.emailAddress.name }}</p>
+    <div class="mail-body" v-html="mail.body.content"></div>
   </div>
   <div v-else class="mail-viewer-empty">
     <em>Select a mail to view its content.</em>
   </div>
 </template>
-
-<script setup>
-const props = defineProps({
-  mail: Object
-})
-</script>
 
 <style scoped>
 .mail-viewer {
