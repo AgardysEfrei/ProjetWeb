@@ -1,33 +1,30 @@
 <template>
-  <div class="user-profile">
+  <div class="user-profile" v-if="user">
     <div class="profile-header">
-      <img :src="user.photo" alt="Photo de profil" class="profile-photo"/>
-      <h1>{{ user.prenom }} {{ user.nom }}</h1>
+      <img :src="user.photo || defaultPhoto" alt="Photo de profil" class="profile-photo" />
+      <h1>{{ user.name }}</h1>
     </div>
     <div class="profile-details">
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Téléphone:</strong> {{ user.telephone }}</p>
+      <p><strong>Email:</strong> {{user.username}}</p>
     </div>
+  </div>
+  <div v-else>
+    <p>Aucun utilisateur connecté.</p>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'UserProfile',
-  props: {
-    user: {
-      type: Object,
-      required: true,
-      default: () => ({
-        nom: 'Gautier',
-        prenom: 'Manon',
-        email: 'test@example.com',
-        telephone: '0123456789',
-        photo: 'https://via.placeholder.com/150'
-      })
-    }
-  }
-}
+<script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const user = computed(() => store.getters.user)
+
+// Optionnel : une photo par défaut si user.photo n'existe pas
+const defaultPhoto = 'https://via.placeholder.com/150'
+
+// Si tu souhaites, tu peux aussi formater les données user ici, par exemple :
+// user.prenom = user.givenName ou user.nom = user.familyName selon ce que renvoie MSAL/Graph
 </script>
 
 <style scoped>

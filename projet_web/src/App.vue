@@ -12,7 +12,7 @@ import MailWriterPage from './pages/MailWriterPage.vue'
 import { ref } from 'vue'
 import inbox from './components/inbox.vue'
 
-const currentPage = ref('home')
+const currentPage = computed(() => store.getters.currentPage)
 const sentMails = ref([])
 
 function goToMailWriter() {
@@ -28,23 +28,11 @@ function handleSendMail(mail) {
 </script>
 
 <template>
-  <header>
-
-    <div class="wrapper">
-      <SigninButton/>
-      <UserProfile />
-    </div>
-    <div v-if="user">
-      <p>Welcome, {{ user.displayName }}</p>
-      <p>Email: {{ user.mail || user.userPrincipalName }}</p>
-    </div>
-
-  </header>
-
   <main>
   </main>
   <base-layout>
-    <home-page v-if="currentPage === 'home'" @create-message="goToMailWriter" :sent-mails="sentMails" />
+    <HomePage v-if="currentPage === 'home'" @create-message="goToMailWriter" :sent-mails="sentMails" />
+    <UserPage v-else-if="currentPage === 'user'"  user=""/>
     <MailWriterPage v-else @back="goToHome" @send-mail="handleSendMail" />
   </base-layout>
 </template>

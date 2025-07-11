@@ -27,26 +27,43 @@ const loginRequest = {
 };
 
 export async function signIn() {
-    await initializeMsal();
-
+    await initializeMsal()
     try {
-        const authResult = await msalInstance.loginPopup(loginRequest);
-        msalInstance.setActiveAccount(authResult.account);
+        // Popup login MSAL
+        const authResult = await msalInstance.loginPopup(loginRequest)
 
+        // Définit le compte actif
+        msalInstance.setActiveAccount(authResult.account)
+
+        // Acquérir token silencieusement
         const tokenResponse = await msalInstance.acquireTokenSilent({
             scopes: loginRequest.scopes,
             account: authResult.account
-        });
+        })
 
-        store.commit('setUser', {
+        // Commit user + accessToken dans le store
+        const user = {
             ...authResult.account,
             accessToken: tokenResponse.accessToken
-        });
+        }
 
-        return authResult.account;
+        store.commit('setUser', user)
+
+        return user
     } catch (error) {
-        console.error("Erreur login:", error);
-        throw error;
+        console.error("Erreur lors de la connexion MSAL:", error)
+        throw error
+    }
+}
+export async function signOut() {
+    try {
+        const accounts = msalInstance.getAllAccounts();
+        if (accounts.length > 0) {
+            await msalInstance.logoutPopup({ account: accounts[0] });
+        }
+        store.commit('clearUser');  // Vide l’état utilisateur après déconnexion
+    } catch (error) {
+        console.error("Erreur lors de la déconnexion :", error);
     }
 }
 

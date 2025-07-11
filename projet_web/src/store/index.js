@@ -1,4 +1,4 @@
-import { createStore } from 'vuex';
+import { createStore } from 'vuex'
 
 export default createStore({
     state() {
@@ -10,58 +10,78 @@ export default createStore({
             },
             loadingEmails: false,
             emailError: null,
-            selectedMail: null,  // <== ajouté ici
+            selectedMail: null,
+
+            // Ajout pour la navigation globale
+            currentPage: 'home'
         }
     },
 
     mutations: {
         setUser(state, user) {
-            state.user = user;
+            state.user = user
         },
         setEmails(state, emails) {
-            state.emails = emails;
+            state.emails = emails
         },
-        setSelectedMail(state, mail) {   // <== mutation pour sélectionner un mail
-            state.selectedMail = mail;
+        setSelectedMail(state, mail) {
+            state.selectedMail = mail
+        },
+
+        // Nouvelle mutation pour la navigation
+        setCurrentPage(state, page) {
+            state.currentPage = page
+        },
+        clearUser(state) {
+            state.user = null;
+            state.emails = { Inbox: [], SentItems: [] };
+            state.selectedMail = null;
+            state.currentPage = 'home';
         }
     },
 
     actions: {
         async fetchEmails({ commit, state }) {
             if (!state.user || !state.user.accessToken) {
-                console.warn('Pas de token d’accès');
-                return;
+                console.warn('Pas de token d’accès')
+                return
             }
-            const token = state.user.accessToken;
+
+            const token = state.user.accessToken
 
             async function fetchFolder(folder) {
-                const response = await fetch(`https://graph.microsoft.com/v1.0/me/mailFolders/${folder}/messages?$top=20`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const response = await fetch(
+                    `https://graph.microsoft.com/v1.0/me/mailFolders/${folder}/messages?$top=20`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` }
+                    }
+                )
                 if (!response.ok) {
-                    throw new Error(`Erreur lors de la récupération des mails du dossier ${folder}`);
+                    throw new Error(
+                        `Erreur lors de la récupération des mails du dossier ${folder}`
+                    )
                 }
-                const data = await response.json();
-                return data.value;
+                const data = await response.json()
+                return data.value
             }
 
             try {
                 const [inboxMails, sentMails] = await Promise.all([
                     fetchFolder('Inbox'),
                     fetchFolder('SentItems')
-                ]);
+                ])
 
                 commit('setEmails', {
                     Inbox: inboxMails,
                     SentItems: sentMails
-                });
+                })
             } catch (e) {
-                console.error(e);
+                console.error(e)
             }
         },
 
-        selectMail({ commit }, mail) {    // <== action pour setter la sélection
-            commit('setSelectedMail', mail);
+        selectMail({ commit }, mail) {
+            commit('setSelectedMail', mail)
         }
     },
 
@@ -70,6 +90,9 @@ export default createStore({
         emails: (state) => state.emails,
         loadingEmails: (state) => state.loadingEmails,
         emailError: (state) => state.emailError,
-        selectedMail: (state) => state.selectedMail   // <== getter sélection mail
+        selectedMail: (state) => state.selectedMail,
+
+        // Getter pour la page courante
+        currentPage: (state) => state.currentPage
     }
-});
+})
